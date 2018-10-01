@@ -2,7 +2,8 @@
 #define __PHYSICS_H_
 
 #include <vector>
-#include <btDefaultCollisionConfiguration.h>
+#include "GameObject.h"
+#include <btBulletDynamicsCommon.h>
 
 class Physics {
     btDefaultCollisionConfiguration* collisionConfiguration;

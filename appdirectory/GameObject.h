@@ -1,8 +1,10 @@
+#ifndef __GameObject_h_
+#define __GameObject_h_
+
 #include <OgreRoot.h>
-#include <btScalar.h>
-#include <btTransform.h>
-#include <btVector3.h>
-#include "Physics.h"
+#include <btBulletDynamicsCommon.h>
+
+class Physics;
 
 class GameObject {
     protected:
@@ -16,5 +18,10 @@ class GameObject {
     btRigidBody* body;
     btTransform tr;
     btVector3 inertia;
-    OgreMotionState* motionState;
-}
+    //OgreMotionState* motionState;
+
+    public:
+    GameObject();
+};
+
+#endif

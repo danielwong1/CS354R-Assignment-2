@@ -1,10 +1,11 @@
-noinst_HEADERS= BallGame.h GameObject.h Physics.h
+ACLOCAL_AMFLAGS= -I m4
+noinst_HEADERS= BallGame.h Physics.h GameObject.h
 
 bin_PROGRAMS= OgreApp
 OgreApp_CPPFLAGS= -I$(top_srcdir)
-OgreApp_SOURCES= BallGame.cpp GameObject.cpp Physics.cpp
-OgreApp_CXXFLAGS= -I/usr/include/OGRE -pthread $(OIS_CFLAGS) $(bullet_CFLAGS)
-OgreApp_LDADD= -L/usr/lib/x86_64-linux-gnu/OGRE-1.9.0 -lOgreMain -lpthread $(OIS_LIBS) $(bullet_LIBS)
+OgreApp_SOURCES= BallGame.cpp Physics.cpp GameObject.cpp
+OgreApp_CXXFLAGS= $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS)
+OgreApp_LDADD= $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS)
 OgreApp_LDFLAGS= -lOgreOverlay -lboost_system
 
 EXTRA_DIST= buildit makeit

@@ -1,6 +1,6 @@
 #include "Physics.h"
 
-void Physics::Physics() {
+Physics::Physics() {
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	overlappingPairCache = new btDbvtBroadphase();
