@@ -1,0 +1,13 @@
+material red
+{
+    technique
+    {
+        pass
+        {
+		    texture_unit
+			{
+			    texture penguin.jpg
+			}
+        }
+    }
+}
