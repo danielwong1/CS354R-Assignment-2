@@ -92,10 +92,7 @@ host_triplet = x86_64-pc-linux-gnu
 bin_PROGRAMS = OgreApp$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
-	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
-	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
@@ -108,10 +105,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_OgreApp_OBJECTS = OgreApp-BallApplication.$(OBJEXT)
+am_OgreApp_OBJECTS = OgreApp-BallGame.$(OBJEXT) \
+	OgreApp-GameObject.$(OBJEXT) OgreApp-Physics.$(OBJEXT)
 OgreApp_OBJECTS = $(am_OgreApp_OBJECTS)
 am__DEPENDENCIES_1 =
-OgreApp_DEPENDENCIES = $(am__DEPENDENCIES_1)
+OgreApp_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -202,14 +200,16 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /v/filer5b/v38q001/danielw/gametech/appdirectory/missing aclocal-1.15
+ACLOCAL = ${SHELL} /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /v/filer5b/v38q001/danielw/gametech/appdirectory/missing autoconf
-AUTOHEADER = ${SHELL} /v/filer5b/v38q001/danielw/gametech/appdirectory/missing autoheader
-AUTOMAKE = ${SHELL} /v/filer5b/v38q001/danielw/gametech/appdirectory/missing automake-1.15
+AUTOCONF = ${SHELL} /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory/missing autoconf
+AUTOHEADER = ${SHELL} /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory/missing autoheader
+AUTOMAKE = ${SHELL} /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory/missing automake-1.15
 AWK = gawk
+BULLET_CFLAGS = 
+BULLET_LIBS = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
@@ -246,7 +246,7 @@ LIPO =
 LN_S = ln -s
 LTLIBOBJS = 
 LT_SYS_LIBRARY_PATH = 
-MAKEINFO = ${SHELL} /v/filer5b/v38q001/danielw/gametech/appdirectory/missing makeinfo
+MAKEINFO = ${SHELL} /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -276,10 +276,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = strip
 VERSION = 0.1
-abs_builddir = /v/filer5b/v38q001/danielw/gametech/appdirectory
-abs_srcdir = /v/filer5b/v38q001/danielw/gametech/appdirectory
-abs_top_builddir = /v/filer5b/v38q001/danielw/gametech/appdirectory
-abs_top_srcdir = /v/filer5b/v38q001/danielw/gametech/appdirectory
+abs_builddir = /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory
+abs_srcdir = /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory
+abs_top_builddir = /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory
+abs_top_srcdir = /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -296,6 +296,8 @@ build_cpu = x86_64
 build_os = linux-gnu
 build_vendor = pc
 builddir = .
+bullet_CFLAGS = -I/usr/include/bullet
+bullet_LIBS = -lBulletSoftBody -lBulletDynamics -lBulletCollision -lLinearMath
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE}
@@ -309,7 +311,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /v/filer5b/v38q001/danielw/gametech/appdirectory/install-sh
+install_sh = ${SHELL} /v/filer5b/v38q001/danielw/gametech/CS354R-Assignment-2/appdirectory/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -330,12 +332,11 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-ACLOCAL_AMFLAGS = -I m4
-noinst_HEADERS = BallApplication.h
+noinst_HEADERS = BallGame.h GameObject.h Physics.h
 OgreApp_CPPFLAGS = -I$(top_srcdir)
-OgreApp_SOURCES = BallApplication.cpp
-OgreApp_CXXFLAGS = -I/usr/include/OGRE -pthread $(OIS_CFLAGS)
-OgreApp_LDADD = -L/usr/lib/x86_64-linux-gnu/OGRE-1.9.0 -lOgreMain -lpthread $(OIS_LIBS)
+OgreApp_SOURCES = BallGame.cpp GameObject.cpp Physics.cpp
+OgreApp_CXXFLAGS = -I/usr/include/OGRE -pthread $(OIS_CFLAGS) $(bullet_CFLAGS)
+OgreApp_LDADD = -L/usr/lib/x86_64-linux-gnu/OGRE-1.9.0 -lOgreMain -lpthread $(OIS_LIBS) $(bullet_LIBS)
 OgreApp_LDFLAGS = -lOgreOverlay -lboost_system
 EXTRA_DIST = buildit makeit
 AUTOMAKE_OPTIONS = foreign
@@ -452,7 +453,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/OgreApp-BallApplication.Po
+include ./$(DEPDIR)/OgreApp-BallGame.Po
+include ./$(DEPDIR)/OgreApp-GameObject.Po
+include ./$(DEPDIR)/OgreApp-Physics.Po
 
 .cpp.o:
 	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -475,19 +478,47 @@ include ./$(DEPDIR)/OgreApp-BallApplication.Po
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(LTCXXCOMPILE) -c -o $@ $<
 
-OgreApp-BallApplication.o: BallApplication.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BallApplication.o -MD -MP -MF $(DEPDIR)/OgreApp-BallApplication.Tpo -c -o OgreApp-BallApplication.o `test -f 'BallApplication.cpp' || echo '$(srcdir)/'`BallApplication.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BallApplication.Tpo $(DEPDIR)/OgreApp-BallApplication.Po
-#	$(AM_V_CXX)source='BallApplication.cpp' object='OgreApp-BallApplication.o' libtool=no \
+OgreApp-BallGame.o: BallGame.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BallGame.o -MD -MP -MF $(DEPDIR)/OgreApp-BallGame.Tpo -c -o OgreApp-BallGame.o `test -f 'BallGame.cpp' || echo '$(srcdir)/'`BallGame.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BallGame.Tpo $(DEPDIR)/OgreApp-BallGame.Po
+#	$(AM_V_CXX)source='BallGame.cpp' object='OgreApp-BallGame.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BallApplication.o `test -f 'BallApplication.cpp' || echo '$(srcdir)/'`BallApplication.cpp
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BallGame.o `test -f 'BallGame.cpp' || echo '$(srcdir)/'`BallGame.cpp
 
-OgreApp-BallApplication.obj: BallApplication.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BallApplication.obj -MD -MP -MF $(DEPDIR)/OgreApp-BallApplication.Tpo -c -o OgreApp-BallApplication.obj `if test -f 'BallApplication.cpp'; then $(CYGPATH_W) 'BallApplication.cpp'; else $(CYGPATH_W) '$(srcdir)/BallApplication.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BallApplication.Tpo $(DEPDIR)/OgreApp-BallApplication.Po
-#	$(AM_V_CXX)source='BallApplication.cpp' object='OgreApp-BallApplication.obj' libtool=no \
+OgreApp-BallGame.obj: BallGame.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BallGame.obj -MD -MP -MF $(DEPDIR)/OgreApp-BallGame.Tpo -c -o OgreApp-BallGame.obj `if test -f 'BallGame.cpp'; then $(CYGPATH_W) 'BallGame.cpp'; else $(CYGPATH_W) '$(srcdir)/BallGame.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BallGame.Tpo $(DEPDIR)/OgreApp-BallGame.Po
+#	$(AM_V_CXX)source='BallGame.cpp' object='OgreApp-BallGame.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BallApplication.obj `if test -f 'BallApplication.cpp'; then $(CYGPATH_W) 'BallApplication.cpp'; else $(CYGPATH_W) '$(srcdir)/BallApplication.cpp'; fi`
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BallGame.obj `if test -f 'BallGame.cpp'; then $(CYGPATH_W) 'BallGame.cpp'; else $(CYGPATH_W) '$(srcdir)/BallGame.cpp'; fi`
+
+OgreApp-GameObject.o: GameObject.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-GameObject.o -MD -MP -MF $(DEPDIR)/OgreApp-GameObject.Tpo -c -o OgreApp-GameObject.o `test -f 'GameObject.cpp' || echo '$(srcdir)/'`GameObject.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-GameObject.Tpo $(DEPDIR)/OgreApp-GameObject.Po
+#	$(AM_V_CXX)source='GameObject.cpp' object='OgreApp-GameObject.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-GameObject.o `test -f 'GameObject.cpp' || echo '$(srcdir)/'`GameObject.cpp
+
+OgreApp-GameObject.obj: GameObject.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-GameObject.obj -MD -MP -MF $(DEPDIR)/OgreApp-GameObject.Tpo -c -o OgreApp-GameObject.obj `if test -f 'GameObject.cpp'; then $(CYGPATH_W) 'GameObject.cpp'; else $(CYGPATH_W) '$(srcdir)/GameObject.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-GameObject.Tpo $(DEPDIR)/OgreApp-GameObject.Po
+#	$(AM_V_CXX)source='GameObject.cpp' object='OgreApp-GameObject.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-GameObject.obj `if test -f 'GameObject.cpp'; then $(CYGPATH_W) 'GameObject.cpp'; else $(CYGPATH_W) '$(srcdir)/GameObject.cpp'; fi`
+
+OgreApp-Physics.o: Physics.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-Physics.o -MD -MP -MF $(DEPDIR)/OgreApp-Physics.Tpo -c -o OgreApp-Physics.o `test -f 'Physics.cpp' || echo '$(srcdir)/'`Physics.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-Physics.Tpo $(DEPDIR)/OgreApp-Physics.Po
+#	$(AM_V_CXX)source='Physics.cpp' object='OgreApp-Physics.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-Physics.o `test -f 'Physics.cpp' || echo '$(srcdir)/'`Physics.cpp
+
+OgreApp-Physics.obj: Physics.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-Physics.obj -MD -MP -MF $(DEPDIR)/OgreApp-Physics.Tpo -c -o OgreApp-Physics.obj `if test -f 'Physics.cpp'; then $(CYGPATH_W) 'Physics.cpp'; else $(CYGPATH_W) '$(srcdir)/Physics.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-Physics.Tpo $(DEPDIR)/OgreApp-Physics.Po
+#	$(AM_V_CXX)source='Physics.cpp' object='OgreApp-Physics.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-Physics.obj `if test -f 'Physics.cpp'; then $(CYGPATH_W) 'Physics.cpp'; else $(CYGPATH_W) '$(srcdir)/Physics.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
