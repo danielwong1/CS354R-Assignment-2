@@ -986,7 +986,8 @@ OgreApp-GameObject.o: GameObject.cpp /usr/include/stdc-predef.h \
  /usr/include/bullet/BulletDynamics/Vehicle/btVehicleRaycaster.h \
  /usr/include/bullet/BulletDynamics/Vehicle/btWheelInfo.h \
  /usr/include/bullet/BulletDynamics/Dynamics/btActionInterface.h \
- /usr/include/bullet/BulletDynamics/Dynamics/btRigidBody.h
+ /usr/include/bullet/BulletDynamics/Dynamics/btRigidBody.h \
+ OgreMotionState.h
 
 /usr/include/stdc-predef.h:
 
@@ -3239,3 +3240,5 @@ GameObject.h:
 /usr/include/bullet/BulletDynamics/Dynamics/btActionInterface.h:
 
 /usr/include/bullet/BulletDynamics/Dynamics/btRigidBody.h:
+
+OgreMotionState.h:

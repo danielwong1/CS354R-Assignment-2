@@ -109,7 +109,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_OgreApp_OBJECTS = OgreApp-BallGame.$(OBJEXT) \
-	OgreApp-Physics.$(OBJEXT) OgreApp-GameObject.$(OBJEXT)
+	OgreApp-Physics.$(OBJEXT) OgreApp-GameObject.$(OBJEXT) \
+	OgreApp-Wall.$(OBJEXT) OgreApp-OgreMotionState.$(OBJEXT)
 OgreApp_OBJECTS = $(am_OgreApp_OBJECTS)
 am__DEPENDENCIES_1 =
 OgreApp_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -337,9 +338,9 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 ACLOCAL_AMFLAGS = -I m4
-noinst_HEADERS = BallGame.h Physics.h GameObject.h
+noinst_HEADERS = BallGame.h Physics.h GameObject.h Wall.h OgreMotionState.h
 OgreApp_CPPFLAGS = -I$(top_srcdir)
-OgreApp_SOURCES = BallGame.cpp Physics.cpp GameObject.cpp
+OgreApp_SOURCES = BallGame.cpp Physics.cpp GameObject.cpp Wall.cpp OgreMotionState.cpp
 OgreApp_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS)
 OgreApp_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS)
 OgreApp_LDFLAGS = -lOgreOverlay -lboost_system
@@ -460,7 +461,9 @@ distclean-compile:
 
 include ./$(DEPDIR)/OgreApp-BallGame.Po
 include ./$(DEPDIR)/OgreApp-GameObject.Po
+include ./$(DEPDIR)/OgreApp-OgreMotionState.Po
 include ./$(DEPDIR)/OgreApp-Physics.Po
+include ./$(DEPDIR)/OgreApp-Wall.Po
 
 .cpp.o:
 	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -524,6 +527,34 @@ OgreApp-GameObject.obj: GameObject.cpp
 #	$(AM_V_CXX)source='GameObject.cpp' object='OgreApp-GameObject.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-GameObject.obj `if test -f 'GameObject.cpp'; then $(CYGPATH_W) 'GameObject.cpp'; else $(CYGPATH_W) '$(srcdir)/GameObject.cpp'; fi`
+
+OgreApp-Wall.o: Wall.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-Wall.o -MD -MP -MF $(DEPDIR)/OgreApp-Wall.Tpo -c -o OgreApp-Wall.o `test -f 'Wall.cpp' || echo '$(srcdir)/'`Wall.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-Wall.Tpo $(DEPDIR)/OgreApp-Wall.Po
+#	$(AM_V_CXX)source='Wall.cpp' object='OgreApp-Wall.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-Wall.o `test -f 'Wall.cpp' || echo '$(srcdir)/'`Wall.cpp
+
+OgreApp-Wall.obj: Wall.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-Wall.obj -MD -MP -MF $(DEPDIR)/OgreApp-Wall.Tpo -c -o OgreApp-Wall.obj `if test -f 'Wall.cpp'; then $(CYGPATH_W) 'Wall.cpp'; else $(CYGPATH_W) '$(srcdir)/Wall.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-Wall.Tpo $(DEPDIR)/OgreApp-Wall.Po
+#	$(AM_V_CXX)source='Wall.cpp' object='OgreApp-Wall.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-Wall.obj `if test -f 'Wall.cpp'; then $(CYGPATH_W) 'Wall.cpp'; else $(CYGPATH_W) '$(srcdir)/Wall.cpp'; fi`
+
+OgreApp-OgreMotionState.o: OgreMotionState.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-OgreMotionState.o -MD -MP -MF $(DEPDIR)/OgreApp-OgreMotionState.Tpo -c -o OgreApp-OgreMotionState.o `test -f 'OgreMotionState.cpp' || echo '$(srcdir)/'`OgreMotionState.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-OgreMotionState.Tpo $(DEPDIR)/OgreApp-OgreMotionState.Po
+#	$(AM_V_CXX)source='OgreMotionState.cpp' object='OgreApp-OgreMotionState.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-OgreMotionState.o `test -f 'OgreMotionState.cpp' || echo '$(srcdir)/'`OgreMotionState.cpp
+
+OgreApp-OgreMotionState.obj: OgreMotionState.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-OgreMotionState.obj -MD -MP -MF $(DEPDIR)/OgreApp-OgreMotionState.Tpo -c -o OgreApp-OgreMotionState.obj `if test -f 'OgreMotionState.cpp'; then $(CYGPATH_W) 'OgreMotionState.cpp'; else $(CYGPATH_W) '$(srcdir)/OgreMotionState.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-OgreMotionState.Tpo $(DEPDIR)/OgreApp-OgreMotionState.Po
+#	$(AM_V_CXX)source='OgreMotionState.cpp' object='OgreApp-OgreMotionState.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-OgreMotionState.obj `if test -f 'OgreMotionState.cpp'; then $(CYGPATH_W) 'OgreMotionState.cpp'; else $(CYGPATH_W) '$(srcdir)/OgreMotionState.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

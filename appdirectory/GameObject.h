@@ -3,6 +3,7 @@
 
 #include <OgreRoot.h>
 #include <btBulletDynamicsCommon.h>
+#include "OgreMotionState.h"
 
 class Physics;
 
@@ -18,9 +19,21 @@ class GameObject {
     btRigidBody* body;
     btTransform tr;
     btVector3 inertia;
-    //OgreMotionState* motionState;
-
+    OgreMotionState* motionState;
+    
     public:
+    GameObject(Ogre::String name,
+    Ogre::SceneManager* sceneMgr,
+    Physics* simulator,
+    Ogre::SceneNode* rootNode,
+    Ogre::Entity* geom,
+    btCollisionShape* shape,
+    btScalar mass,
+    btRigidBody* body,
+    btTransform tr,
+    btVector3 inertia,
+    OgreMotionState* motionState);
+
     GameObject();
 };
 
