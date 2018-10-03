@@ -10,6 +10,8 @@
 #include <OgreMeshManager.h>
 #include <time.h>
 #include <string>
+#include "Wall.h"
+#include "Ball.h"
 
 BallGame::BallGame() : mRoot(0), 
     mResourcesCfg(Ogre::StringUtil::BLANK), 
@@ -98,66 +100,27 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
         mCamera->setPosition(cameraPos + Ogre::Vector3(0, -cameraSpeed, 0));
     }
 
-    mSceneMgr->setShadowFarDistance(mCamera->getPosition().z + gridSize);
+    /*mSceneMgr->setShadowFarDistance(mCamera->getPosition().z + gridSize);
     Ogre::SceneNode* ball = mSceneMgr->getSceneNode("Ball");
-    Ogre::Vector3 bPosition = ball->getPosition();
+    Ogre::Vector3 bPosition = ball->getPosition();*/
     
-    double bRadius = 10.0; 
-
-    if (bPosition.y < -gridSize/2.0f + bRadius && bVelocity.y < 0.0f) bVelocity.y = -bVelocity.y;
-    else if (bPosition.y > gridSize/2.0f - bRadius && bVelocity.y > 0.0f) bVelocity.y = -bVelocity.y;
-    if (bPosition.z < -gridSize/2.0f + bRadius && bVelocity.z < 0.0f) bVelocity.z = -bVelocity.z;
-    else if (bPosition.z > gridSize/2.0f - bRadius && bVelocity.z > 0.0f) bVelocity.z = -bVelocity.z;
-    if (bPosition.x < -gridSize/2.0f + bRadius && bVelocity.x < 0.0f) bVelocity.x = -bVelocity.x;
-    else if (bPosition.x > gridSize/2.0f - bRadius && bVelocity.x > 0.0f) bVelocity.x = -bVelocity.x;
-    bPosition = ball->getPosition();
-
-    ball->translate(bVelocity * evt.timeSinceLastFrame);
-    bPosition = ball->getPosition();
-
+    if(simulator != NULL) {
+        simulator->dynamicsWorld->stepSimulation(1.0f/60.0f);
+    }
     return true;
-}
-
-void BallGame::createWall(std::string name, Ogre::Vector3 direction) {
-    Ogre::MovablePlane plane( direction, -gridSize/2 );
-
-    Ogre::MeshManager::getSingleton().createPlane(
-        name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, 
-        plane, gridSize, gridSize, 20, 20, true, 1, 1, 1, 
-        direction.perpendicular()
-    );
-
-    Ogre::Entity* wallEntity = mSceneMgr->createEntity(name);
-    Ogre::SceneNode* sceneNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-    sceneNode->attachObject(wallEntity);
-
-    //Setting up materials and casted shadows for the wall
-    wallEntity->setMaterialName("sibenik/poplocenje");
-    Ogre::MaterialPtr mp = Ogre::MaterialManager::getSingleton().getByName("sibenik/poplocenje");
-    mp.get()->setReceiveShadows(true);
-    wallEntity->setCastShadows(false);
 }
 
 void BallGame::createScene(void)
 {
-    mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
-    mSceneMgr->setShadowFarDistance(gridSize);
-
-    Ogre::Entity* ballEntity = mSceneMgr->createEntity("sphere", "sphere.mesh");
-    Ogre::SceneNode* ballNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Ball");
-    ballEntity->setCastShadows(true);
-    ballEntity->setMaterialName("OceanHLSL_GLSL");
-    Ogre::MaterialPtr mp = Ogre::MaterialManager::getSingleton().getByName("OceanHLSL_GLSL");
-    mp.get()->setReceiveShadows(false);
-    ballNode->attachObject(ballEntity);
-    ballNode->scale(0.1f,0.1f,0.1f); 
-
-    createWall("frontPlane", Ogre::Vector3::NEGATIVE_UNIT_Z);
-    createWall("backPlane", Ogre::Vector3::UNIT_Z);
-    createWall("leftPlane", Ogre::Vector3::UNIT_X);
-    createWall("rightPlane", Ogre::Vector3::NEGATIVE_UNIT_X);
-    createWall("topPlane", Ogre::Vector3::NEGATIVE_UNIT_Y);
-    createWall("botPlane", Ogre::Vector3::UNIT_Y);
+    /*mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+    mSceneMgr->setShadowFarDistance(gridSize);*/
+  
+    Wall("leftWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_X);
+    Wall("topWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_Y);
+    Wall("botWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Y);
+    Wall("rightWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_X);
+    Wall("backWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Z);
+    Ball("mainBall", mSceneMgr, simulator);
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
 
@@ -177,13 +140,6 @@ bool BallGame::go()
       mResourcesCfg = "resources.cfg";
       mPluginsCfg = "plugins.cfg";
     #endif
-
-    srand (time(NULL));
-    double x = 20 * (double)rand() / RAND_MAX;
-    double y = 20 * (double)rand() / RAND_MAX;
-    double z = 20 * (double)rand() / RAND_MAX;
-    gridSize=100;
-    bVelocity = Ogre::Vector3(x, y, z);
 
     mRoot = new Ogre::Root(mPluginsCfg);
     Ogre::ConfigFile cf;
@@ -211,22 +167,22 @@ bool BallGame::go()
 
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-    mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
     
+    mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
     mCamera = mSceneMgr->createCamera("MainCam");
-
-    mCamera->setPosition(0, 0, 100);
+    mCamera->setPosition(0, 0, 200);
     mCamera->lookAt(0, 0, 0);
     mCamera->setNearClipDistance(5);
 
     Ogre::Viewport* vp = mWindow->addViewport(mCamera);
-
     vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
 
     mCamera->setAspectRatio(
       Ogre::Real(vp->getActualWidth()) / 
       Ogre::Real(vp->getActualHeight()));
 
+
+    simulator = new Physics();  
     createScene();
 
     Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");

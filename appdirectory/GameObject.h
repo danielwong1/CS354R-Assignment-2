@@ -8,7 +8,7 @@
 class Physics;
 
 class GameObject {
-    protected:
+    public:
     Ogre::String name;
     Ogre::SceneManager* sceneMgr;
     Physics* simulator;
@@ -20,8 +20,7 @@ class GameObject {
     btTransform tr;
     btVector3 inertia;
     OgreMotionState* motionState;
-    
-    public:
+
     GameObject(Ogre::String name,
     Ogre::SceneManager* sceneMgr,
     Physics* simulator,

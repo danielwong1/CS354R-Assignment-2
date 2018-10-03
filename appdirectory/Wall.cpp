@@ -3,6 +3,7 @@
 #include <OgreEntity.h>
 #include <OgreMeshManager.h>
 #include <btBulletCollisionCommon.h>
+#include "Physics.h"
 
 Wall::Wall(Ogre::String name, 
     Ogre::SceneManager* sceneMgr, 
@@ -34,4 +35,6 @@ Wall::Wall(Ogre::String name,
     mass = 0.0;
     motionState = new OgreMotionState(tr, rootNode);
     body = new btRigidBody(mass, motionState, shape);
+    body->setRestitution(1.0f);
+    simulator->dynamicsWorld->addRigidBody(body);
 }

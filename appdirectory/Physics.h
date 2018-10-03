@@ -6,6 +6,7 @@
 #include <btBulletDynamicsCommon.h>
 
 class Physics {
+    public: 
     btDefaultCollisionConfiguration* collisionConfiguration;
 	btCollisionDispatcher* dispatcher;
 	btBroadphaseInterface* overlappingPairCache;
@@ -13,7 +14,6 @@ class Physics {
     btDiscreteDynamicsWorld* dynamicsWorld;
 	std::vector<GameObject *> gameObjects;
 
-    public:
     Physics();
 };
 

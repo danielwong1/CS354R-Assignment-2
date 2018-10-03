@@ -4,9 +4,9 @@
 #include "GameObject.h"
 
 class Wall : public GameObject {
-    static const int GRID_SIZE = 100;
-
     public:
+    
+    static const int GRID_SIZE = 200;
     Wall(Ogre::String name, 
     Ogre::SceneManager* sceneMgr, 
     Physics* simulator,

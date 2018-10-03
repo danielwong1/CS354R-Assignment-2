@@ -9,7 +9,7 @@
 #include <OISMouse.h>
 #include <OgreWindowEventUtilities.h>
 #include <string>
-//---------------------------------------------------------------------------
+#include "Physics.h"
 
 class BallGame : public Ogre::WindowEventListener, public Ogre::FrameListener
 {
@@ -24,24 +24,17 @@ public:
 	Ogre::String mResourcesCfg;
 	Ogre::String mPluginsCfg;
 
-    Ogre::Vector3 bVelocity;
-    Ogre::Entity* ballEntity;
-    int gridSize;
+    Physics* simulator;
+    
     BallGame(void);
     virtual ~BallGame(void);
     virtual void windowResized(Ogre::RenderWindow* rw);
     virtual void windowClosed(Ogre::RenderWindow* rw);
 
     bool go();
-    void createWall(std::string name, Ogre::Vector3 direction);
 protected:
-    // Ogre::FrameListener
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
 };
 
-//---------------------------------------------------------------------------
-
-#endif // #ifndef __BallGame_h_
-
-//---------------------------------------------------------------------------
+#endif 
