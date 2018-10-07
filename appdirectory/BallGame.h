@@ -2,6 +2,9 @@
 #ifndef __BallGame_h_
 #define __BallGame_h_
 
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
+
 #include <OgreRoot.h>
 #include <OISEvents.h>
 #include <OISInputManager.h>
@@ -33,6 +36,7 @@ public:
 
     bool go();
 protected:
+    CEGUI::OgreRenderer* mRenderer;
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
 };

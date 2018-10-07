@@ -114,6 +114,27 @@ void BallGame::createScene(void)
 {
     /*mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
     mSceneMgr->setShadowFarDistance(gridSize);*/
+
+    mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+
+    CEGUI::ImageManager::setImagesetDefaultResourceGroup("General");
+    CEGUI::Font::setDefaultResourceGroup("General");
+    CEGUI::Scheme::setDefaultResourceGroup("General");
+    CEGUI::WidgetLookManager::setDefaultResourceGroup("General");
+    CEGUI::WindowManager::setDefaultResourceGroup("General");
+
+    CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
+    CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
+
+    CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+    CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+
+    CEGUI::Window *quit = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/QuitButton");
+    quit->setText("Quit");
+    quit->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+
+    sheet->addChild(quit);
+    CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
   
     Wall("leftWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_X);
     Wall("topWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_Y);
