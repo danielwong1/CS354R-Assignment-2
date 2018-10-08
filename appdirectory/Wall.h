@@ -6,7 +6,7 @@
 class Wall : public GameObject {
     public:
     
-    static const int GRID_SIZE = 200;
+    static const int GRID_SIZE = 20;
     Wall(Ogre::String name, 
     Ogre::SceneManager* sceneMgr, 
     Physics* simulator,

@@ -66,21 +66,16 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
         mCamera->setPosition(cameraPos + Ogre::Vector3(0, -cameraSpeed, 0));
     }
 
-    /*mSceneMgr->setShadowFarDistance(mCamera->getPosition().z + gridSize);
-    Ogre::SceneNode* ball = mSceneMgr->getSceneNode("Ball");
-    Ogre::Vector3 bPosition = ball->getPosition();*/
+    mSceneMgr->setShadowFarDistance(mCamera->getPosition().z + Wall::GRID_SIZE);
     
     if(simulator != NULL) {
-        simulator->dynamicsWorld->stepSimulation(1.0f/60.0f);
+        simulator->dynamicsWorld->stepSimulation(simulator->physicsClock->getTimeSeconds());
+        simulator->physicsClock->reset();
     }
     return true;
 }
 
-void BallGame::createScene(void)
-{
-    /*mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
-    mSceneMgr->setShadowFarDistance(gridSize);*/
-
+void BallGame::setupCEGUI(void) {
     mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
 
     CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
@@ -101,7 +96,12 @@ void BallGame::createScene(void)
 
     sheet->addChild(quit);
     CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
-  
+}
+
+void BallGame::createScene(void)
+{
+    mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+
     Wall("leftWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_X);
     Wall("topWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_Y);
     Wall("botWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Y);
@@ -112,16 +112,17 @@ void BallGame::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
 
     Ogre::Light* light = mSceneMgr->createLight("SpotLight");
+    light->setPosition(Ogre::Vector3(0, Wall::GRID_SIZE / 2, 0));
     mSceneMgr->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5));
     
     light->setCastShadows(true);
-    light->setPosition(0, 0, 0);
 }
 
 void BallGame::go()
 {
     simulator = new Physics();
     BaseApplication::go();
+    setupCEGUI();
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

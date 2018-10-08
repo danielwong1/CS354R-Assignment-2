@@ -111,10 +111,12 @@ PROGRAMS = $(bin_PROGRAMS)
 am_OgreApp_OBJECTS = OgreApp-BallGame.$(OBJEXT) \
 	OgreApp-Physics.$(OBJEXT) OgreApp-GameObject.$(OBJEXT) \
 	OgreApp-Wall.$(OBJEXT) OgreApp-Ball.$(OBJEXT) \
-	OgreApp-OgreMotionState.$(OBJEXT)
+	OgreApp-OgreMotionState.$(OBJEXT) \
+	OgreApp-BaseApplication.$(OBJEXT)
 OgreApp_OBJECTS = $(am_OgreApp_OBJECTS)
 am__DEPENDENCIES_1 =
 OgreApp_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -218,6 +220,10 @@ BULLET_CFLAGS =
 BULLET_LIBS = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
+CEGUI_CFLAGS = -I/lusr/opt/cegui-0.8.7/include/cegui-0
+CEGUI_LIBS = -L/lusr/opt/cegui-0.8.7/lib -lCEGUIBase-0
+CEGUI_OGRE_CFLAGS = -pthread -I/lusr/opt/cegui-0.8.7/include/cegui-0 -I/usr/include/OGRE
+CEGUI_OGRE_LIBS = -L/lusr/opt/cegui-0.8.7/lib -lCEGUIOgreRenderer-0 -lOgreMain -lpthread -lCEGUIBase-0
 CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
@@ -339,11 +345,11 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 ACLOCAL_AMFLAGS = -I m4
-noinst_HEADERS = BallGame.h Physics.h GameObject.h Wall.h Ball.h OgreMotionState.h
+noinst_HEADERS = BallGame.h Physics.h GameObject.h Wall.h Ball.h OgreMotionState.h BaseApplication.h
 OgreApp_CPPFLAGS = -I$(top_srcdir)
-OgreApp_SOURCES = BallGame.cpp Physics.cpp GameObject.cpp Wall.cpp Ball.cpp OgreMotionState.cpp
-OgreApp_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS)
-OgreApp_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS)
+OgreApp_SOURCES = BallGame.cpp Physics.cpp GameObject.cpp Wall.cpp Ball.cpp OgreMotionState.cpp BaseApplication.cpp
+OgreApp_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS)
+OgreApp_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS)
 OgreApp_LDFLAGS = -lOgreOverlay -lboost_system
 EXTRA_DIST = buildit makeit
 AUTOMAKE_OPTIONS = foreign
@@ -462,6 +468,7 @@ distclean-compile:
 
 include ./$(DEPDIR)/OgreApp-Ball.Po
 include ./$(DEPDIR)/OgreApp-BallGame.Po
+include ./$(DEPDIR)/OgreApp-BaseApplication.Po
 include ./$(DEPDIR)/OgreApp-GameObject.Po
 include ./$(DEPDIR)/OgreApp-OgreMotionState.Po
 include ./$(DEPDIR)/OgreApp-Physics.Po
@@ -571,6 +578,20 @@ OgreApp-OgreMotionState.obj: OgreMotionState.cpp
 #	$(AM_V_CXX)source='OgreMotionState.cpp' object='OgreApp-OgreMotionState.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-OgreMotionState.obj `if test -f 'OgreMotionState.cpp'; then $(CYGPATH_W) 'OgreMotionState.cpp'; else $(CYGPATH_W) '$(srcdir)/OgreMotionState.cpp'; fi`
+
+OgreApp-BaseApplication.o: BaseApplication.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BaseApplication.o -MD -MP -MF $(DEPDIR)/OgreApp-BaseApplication.Tpo -c -o OgreApp-BaseApplication.o `test -f 'BaseApplication.cpp' || echo '$(srcdir)/'`BaseApplication.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BaseApplication.Tpo $(DEPDIR)/OgreApp-BaseApplication.Po
+#	$(AM_V_CXX)source='BaseApplication.cpp' object='OgreApp-BaseApplication.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BaseApplication.o `test -f 'BaseApplication.cpp' || echo '$(srcdir)/'`BaseApplication.cpp
+
+OgreApp-BaseApplication.obj: BaseApplication.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BaseApplication.obj -MD -MP -MF $(DEPDIR)/OgreApp-BaseApplication.Tpo -c -o OgreApp-BaseApplication.obj `if test -f 'BaseApplication.cpp'; then $(CYGPATH_W) 'BaseApplication.cpp'; else $(CYGPATH_W) '$(srcdir)/BaseApplication.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BaseApplication.Tpo $(DEPDIR)/OgreApp-BaseApplication.Po
+#	$(AM_V_CXX)source='BaseApplication.cpp' object='OgreApp-BaseApplication.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BaseApplication.obj `if test -f 'BaseApplication.cpp'; then $(CYGPATH_W) 'BaseApplication.cpp'; else $(CYGPATH_W) '$(srcdir)/BaseApplication.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

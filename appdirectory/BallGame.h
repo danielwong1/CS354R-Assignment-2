@@ -27,6 +27,7 @@ protected:
     CEGUI::OgreRenderer* mRenderer;
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
+    void setupCEGUI(void);
 };
 
 #endif 
