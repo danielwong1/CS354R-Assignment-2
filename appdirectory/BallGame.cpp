@@ -12,6 +12,7 @@
 #include <string>
 #include "Wall.h"
 #include "Ball.h"
+#include "Score.h"
 
 BallGame::BallGame() : mRenderer(0)
 {
@@ -84,22 +85,12 @@ void BallGame::setupCEGUI(void) {
     CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
     CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
 
-    CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
-    CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
-
-    CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-    CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-
-    CEGUI::Window *quit = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/QuitButton");
-    quit->setText("Quit");
-    quit->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-
-    sheet->addChild(quit);
-    CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+    Score();
 }
 
 void BallGame::createScene(void)
 {
+    setupCEGUI();
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
 
     Wall("leftWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_X);
@@ -122,7 +113,6 @@ void BallGame::go()
 {
     simulator = new Physics();
     BaseApplication::go();
-    setupCEGUI();
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
