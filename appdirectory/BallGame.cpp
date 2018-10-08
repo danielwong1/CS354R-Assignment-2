@@ -13,47 +13,13 @@
 #include "Wall.h"
 #include "Ball.h"
 
-BallGame::BallGame() : mRoot(0), 
-    mResourcesCfg(Ogre::StringUtil::BLANK), 
-    mPluginsCfg(Ogre::StringUtil::BLANK)
+BallGame::BallGame() : mRenderer(0)
 {
 }
 
 BallGame::~BallGame(void)
 {
-    //Remove ourself as a Window listener
-    Ogre::WindowEventUtilities::removeWindowEventListener(mWindow, this);
-    windowClosed(mWindow);
-    delete mRoot;
-}
-
-//Adjust mouse clipping area
-void BallGame::windowResized(Ogre::RenderWindow* rw)
-{
-    unsigned int width, height, depth;
-    int left, top;
-    rw->getMetrics(width, height, depth, left, top);
- 
-    const OIS::MouseState &ms = mMouse->getMouseState();
-    ms.width = width;
-    ms.height = height;
-}
-
-//Unattach OIS before window shutdown (very important under Linux)
-void BallGame::windowClosed(Ogre::RenderWindow* rw)
-{
-    //Only close for window that created OIS (the main window in these demos)
-    if(rw == mWindow)
-    {
-        if(mInputManager)
-        {
-            mInputManager->destroyInputObject( mMouse );
-            mInputManager->destroyInputObject( mKeyboard );
- 
-            OIS::InputManager::destroyInputSystem(mInputManager);
-            mInputManager = 0;
-        }
-    }
+    CEGUI::OgreRenderer::destroySystem();
 }
 
 bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -117,11 +83,11 @@ void BallGame::createScene(void)
 
     mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
 
-    CEGUI::ImageManager::setImagesetDefaultResourceGroup("General");
-    CEGUI::Font::setDefaultResourceGroup("General");
-    CEGUI::Scheme::setDefaultResourceGroup("General");
-    CEGUI::WidgetLookManager::setDefaultResourceGroup("General");
-    CEGUI::WindowManager::setDefaultResourceGroup("General");
+    CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
+    CEGUI::Font::setDefaultResourceGroup("Fonts");
+    CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+    CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+    CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
 
     CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
     CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
@@ -152,81 +118,10 @@ void BallGame::createScene(void)
     light->setPosition(0, 0, 0);
 }
 
-bool BallGame::go()
+void BallGame::go()
 {
-    #ifdef _DEBUG
-      mResourcesCfg = "resources_d.cfg";
-      mPluginsCfg = "plugins_d.cfg";
-    #else
-      mResourcesCfg = "resources.cfg";
-      mPluginsCfg = "plugins.cfg";
-    #endif
-
-    mRoot = new Ogre::Root(mPluginsCfg);
-    Ogre::ConfigFile cf;
-    cf.load(mResourcesCfg);
-
-    Ogre::String name, locType;
-    Ogre::ConfigFile::SectionIterator secIt = cf.getSectionIterator();
-    while (secIt.hasMoreElements())
-    {
-        Ogre::ConfigFile::SettingsMultiMap* settings = secIt.getNext();
-        Ogre::ConfigFile::SettingsMultiMap::iterator it;
-        for (it = settings->begin(); it != settings->end(); ++it)
-        {
-            locType = it->first;
-            name = it->second;
-            Ogre::ResourceGroupManager::getSingleton().addResourceLocation(name, locType);
-        }
-    }
-    
-    if(!(mRoot->restoreConfig() || mRoot->showConfigDialog()))
-    {
-        return false;
-    }
-    mWindow = mRoot->initialise(true, "BallGame Render Window");
-
-    Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
-    Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-    
-    mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
-    mCamera = mSceneMgr->createCamera("MainCam");
-    mCamera->setPosition(0, 0, 200);
-    mCamera->lookAt(0, 0, 0);
-    mCamera->setNearClipDistance(5);
-
-    Ogre::Viewport* vp = mWindow->addViewport(mCamera);
-    vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-
-    mCamera->setAspectRatio(
-      Ogre::Real(vp->getActualWidth()) / 
-      Ogre::Real(vp->getActualHeight()));
-
-
-    simulator = new Physics();  
-    createScene();
-
-    Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
-    OIS::ParamList pl;
-    size_t windowHnd = 0;
-    std::ostringstream windowHndStr;
-    
-    mWindow->getCustomAttribute("WINDOW", &windowHnd);
-    windowHndStr << windowHnd;
-    pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
-    
-    mInputManager = OIS::InputManager::createInputSystem( pl );
-    mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, false ));
-    mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject( OIS::OISMouse, false ));
-
-    //Set initial mouse clipping size
-    windowResized(mWindow);
-
-    //Register as a Window listener
-    Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
-    mRoot->addFrameListener(this);
-    mRoot->startRendering();
-    return true;
+    simulator = new Physics();
+    BaseApplication::go();
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
