@@ -20,6 +20,7 @@ void OgreMotionState::setWorldTransform(const btTransform &worldTrans) {
         return; // silently return before we set a node 
     btQuaternion rot = worldTrans.getRotation(); 
     mObj->setOrientation(rot.w(), rot.x(), rot.y(), rot.z()); 
-    btVector3 pos = worldTrans.getOrigin(); 
+    btVector3 pos = worldTrans.getOrigin();
     mObj->setPosition(pos.x(), pos.y(), pos.z()); 
-} 
+    mPos = worldTrans;
+}
