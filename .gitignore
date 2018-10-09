@@ -1,0 +1,17 @@
+
+# Object files
+
+**.o
+
+# Automake
+Makefile
+Makefile.*
+!Makefile.am
+autom4te.cache/
+config.*
+libtool
+
+ltmain.sh
+OgreApp
+\.deps/
+configure
