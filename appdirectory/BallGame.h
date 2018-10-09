@@ -15,6 +15,8 @@
 #include "Physics.h"
 #include "BaseApplication.h"
 
+class Paddle;
+
 class BallGame : public BaseApplication
 {
 public:
@@ -24,6 +26,8 @@ public:
     virtual ~BallGame(void);
     virtual void go();
 protected:
+	Paddle* mPaddle;
+
     CEGUI::OgreRenderer* mRenderer;
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);

@@ -12,6 +12,7 @@
 #include <string>
 #include "Wall.h"
 #include "Ball.h"
+#include "Paddle.h"
 
 BallGame::BallGame() : mRenderer(0)
 {
@@ -33,6 +34,8 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     double cameraSpeed = 0.1;
     double zoomSpeed = 1.0;
+    Ogre::Radian rotationSpeed = Ogre::Radian(Ogre::Degree(1));
+
     if(mKeyboard->isKeyDown(OIS::KC_ESCAPE))
         return false;
 
@@ -49,21 +52,41 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if(mKeyboard->isKeyDown(OIS::KC_A)) {
         Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(-cameraSpeed, 0, 0));
+        mPaddle->moveBy(Ogre::Vector3(-cameraSpeed, 0, 0));
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_D)) {
         Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(cameraSpeed, 0, 0));
+        mPaddle->moveBy(Ogre::Vector3(cameraSpeed, 0, 0));
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_W)) {
         Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(0, cameraSpeed, 0));
+        mPaddle->moveBy(Ogre::Vector3(0, cameraSpeed, 0));
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_S)) {
         Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(0, -cameraSpeed, 0));
+        mPaddle->moveBy(Ogre::Vector3(0, -cameraSpeed, 0));
+    }
+
+    if(mKeyboard->isKeyDown(OIS::KC_UP)) {
+        mPaddle->rotateBy(Ogre::Quaternion(-rotationSpeed, Ogre::Vector3(1, 0, 0)));
+    }
+
+    if(mKeyboard->isKeyDown(OIS::KC_RIGHT)) {
+        mPaddle->rotateBy(Ogre::Quaternion(rotationSpeed, Ogre::Vector3(0, 1, 0)));
+    }
+
+    if(mKeyboard->isKeyDown(OIS::KC_DOWN)) {
+        mPaddle->rotateBy(Ogre::Quaternion(rotationSpeed, Ogre::Vector3(1, 0, 0)));
+    }
+
+    if(mKeyboard->isKeyDown(OIS::KC_LEFT)) {
+        mPaddle->rotateBy(Ogre::Quaternion(-rotationSpeed, Ogre::Vector3(0, 1, 0)));
     }
 
     /*mSceneMgr->setShadowFarDistance(mCamera->getPosition().z + gridSize);
@@ -108,6 +131,7 @@ void BallGame::createScene(void)
     Wall("rightWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_X);
     Wall("backWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Z);
     Ball("mainBall", mSceneMgr, simulator);
+    mPaddle = new Paddle(mSceneMgr, simulator);
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
 
