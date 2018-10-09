@@ -12,6 +12,17 @@ config.*
 libtool
 
 ltmain.sh
+install-sh
 OgreApp
 \.deps/
 configure
+
+**.m4
+depcomp
+config.*
+CEGUI.log
+
+m4/
+missing
+ogre.cfg
+Ogre.log
