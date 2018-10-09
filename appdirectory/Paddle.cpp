@@ -17,23 +17,26 @@ Paddle::Paddle(Ogre::SceneManager* sceneMgr,
     rootNode = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
 	geom = this->sceneMgr->createEntity(Ogre::SceneManager::PT_CUBE);
 	rootNode->attachObject(geom);
-    rootNode->scale(0.60f, 0.60f, 0.1f);
+    rootNode->scale(0.06f, 0.060f, 0.01f);
 
     geom->setCastShadows(true);
     geom->setMaterialName("Examples/Water0");
     Ogre::MaterialPtr mp = Ogre::MaterialManager::getSingleton().getByName("Examples/Water0");
     mp.get()->setReceiveShadows(false);
 
-	shape = new btBoxShape(btVector3(30.0f, 30.0f, 5.0f));
-	mass = 1.0f;
+	shape = new btBoxShape(btVector3(3.0f, 3.0f, 0.5f));
+	mass = 0.0f;
 	motionState = new OgreMotionState(tr, rootNode);
-        
+
 	body = new btRigidBody(mass, motionState, shape, inertia);
 
     body->setRestitution(0.8f);
     simulator->dynamicsWorld->addRigidBody(body);
     simulator->gameObjects.push_back(this);
-    body->setGravity(btVector3(0.0f, 0.0f, 0.0f));
+
+    body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+    body->setActivationState(DISABLE_DEACTIVATION);
+    moveBy(Ogre::Vector3(0.0f, 2.0f, 8.0f));    
 }
 
 void Paddle::moveBy(const Ogre::Vector3 &distance) {

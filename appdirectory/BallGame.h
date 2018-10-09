@@ -25,7 +25,7 @@ public:
     static std::string botString;
     Physics* simulator;
     Score* scoreObj;
-    
+
     BallGame(void);
     virtual ~BallGame(void);
     virtual void go();

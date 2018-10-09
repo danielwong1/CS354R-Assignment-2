@@ -34,4 +34,6 @@ Ball::Ball(Ogre::String name,
     body->setRestitution(0.85f);
     simulator->dynamicsWorld->addRigidBody(body);
     simulator->gameObjects.push_back(this);
+
+    body->applyCentralImpulse(btVector3(0.0f, 0.0f, -5.0f));
 }

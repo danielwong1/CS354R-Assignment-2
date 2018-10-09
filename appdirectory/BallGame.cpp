@@ -153,6 +153,8 @@ void BallGame::createScene(void)
     Wall("backWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Z);
     Ball(ballString, mSceneMgr, simulator);
 
+    mPaddle = new Paddle(mSceneMgr, simulator);
+
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
 
     Ogre::Light* light = mSceneMgr->createLight("SpotLight");
