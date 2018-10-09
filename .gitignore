@@ -21,6 +21,8 @@ configure
 depcomp
 config.*
 CEGUI.log
+compile
+stamp-h1
 
 m4/
 missing
