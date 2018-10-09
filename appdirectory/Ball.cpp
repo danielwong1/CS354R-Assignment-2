@@ -30,6 +30,7 @@ Ball::Ball(Ogre::String name,
 	motionState = new OgreMotionState(tr, rootNode);
         
 	body = new btRigidBody(mass, motionState, shape, inertia);
+    body->setUserPointer((void*) this);
     body->setRestitution(0.85f);
     simulator->dynamicsWorld->addRigidBody(body);
     simulator->gameObjects.push_back(this);

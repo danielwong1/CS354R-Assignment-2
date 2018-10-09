@@ -1285,7 +1285,7 @@ OgreApp-BallGame.o: BallGame.cpp /usr/include/stdc-predef.h BallGame.h \
  /usr/include/OGRE/Overlay/OgrePanelOverlayElement.h \
  /usr/include/OGRE/Overlay/OgreTextAreaOverlayElement.h \
  /usr/include/OGRE/Overlay/OgreOverlayElementFactory.h \
- /usr/include/OGRE/OgreRenderQueueListener.h \
+ /usr/include/OGRE/OgreRenderQueueListener.h Score.h \
  /usr/include/OGRE/OgreVector3.h /usr/include/OGRE/OgreMeshManager.h \
  /usr/include/OGRE/OgrePatchMesh.h /usr/include/OGRE/OgrePatchSurface.h \
  Wall.h Ball.h
@@ -4177,6 +4177,8 @@ BaseApplication.h:
 /usr/include/OGRE/Overlay/OgreOverlayElementFactory.h:
 
 /usr/include/OGRE/OgreRenderQueueListener.h:
+
+Score.h:
 
 /usr/include/OGRE/OgreVector3.h:
 

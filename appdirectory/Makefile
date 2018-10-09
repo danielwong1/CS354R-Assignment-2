@@ -112,7 +112,7 @@ am_OgreApp_OBJECTS = OgreApp-BallGame.$(OBJEXT) \
 	OgreApp-Physics.$(OBJEXT) OgreApp-GameObject.$(OBJEXT) \
 	OgreApp-Wall.$(OBJEXT) OgreApp-Ball.$(OBJEXT) \
 	OgreApp-OgreMotionState.$(OBJEXT) \
-	OgreApp-BaseApplication.$(OBJEXT)
+	OgreApp-BaseApplication.$(OBJEXT) OgreApp-Score.$(OBJEXT)
 OgreApp_OBJECTS = $(am_OgreApp_OBJECTS)
 am__DEPENDENCIES_1 =
 OgreApp_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -345,9 +345,9 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 ACLOCAL_AMFLAGS = -I m4
-noinst_HEADERS = BallGame.h Physics.h GameObject.h Wall.h Ball.h OgreMotionState.h BaseApplication.h
+noinst_HEADERS = BallGame.h Physics.h GameObject.h Wall.h Ball.h OgreMotionState.h BaseApplication.h Score.h
 OgreApp_CPPFLAGS = -I$(top_srcdir)
-OgreApp_SOURCES = BallGame.cpp Physics.cpp GameObject.cpp Wall.cpp Ball.cpp OgreMotionState.cpp BaseApplication.cpp
+OgreApp_SOURCES = BallGame.cpp Physics.cpp GameObject.cpp Wall.cpp Ball.cpp OgreMotionState.cpp BaseApplication.cpp Score.cpp
 OgreApp_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS)
 OgreApp_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS)
 OgreApp_LDFLAGS = -lOgreOverlay -lboost_system
@@ -472,6 +472,7 @@ include ./$(DEPDIR)/OgreApp-BaseApplication.Po
 include ./$(DEPDIR)/OgreApp-GameObject.Po
 include ./$(DEPDIR)/OgreApp-OgreMotionState.Po
 include ./$(DEPDIR)/OgreApp-Physics.Po
+include ./$(DEPDIR)/OgreApp-Score.Po
 include ./$(DEPDIR)/OgreApp-Wall.Po
 
 .cpp.o:
@@ -592,6 +593,20 @@ OgreApp-BaseApplication.obj: BaseApplication.cpp
 #	$(AM_V_CXX)source='BaseApplication.cpp' object='OgreApp-BaseApplication.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BaseApplication.obj `if test -f 'BaseApplication.cpp'; then $(CYGPATH_W) 'BaseApplication.cpp'; else $(CYGPATH_W) '$(srcdir)/BaseApplication.cpp'; fi`
+
+OgreApp-Score.o: Score.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-Score.o -MD -MP -MF $(DEPDIR)/OgreApp-Score.Tpo -c -o OgreApp-Score.o `test -f 'Score.cpp' || echo '$(srcdir)/'`Score.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-Score.Tpo $(DEPDIR)/OgreApp-Score.Po
+#	$(AM_V_CXX)source='Score.cpp' object='OgreApp-Score.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-Score.o `test -f 'Score.cpp' || echo '$(srcdir)/'`Score.cpp
+
+OgreApp-Score.obj: Score.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-Score.obj -MD -MP -MF $(DEPDIR)/OgreApp-Score.Tpo -c -o OgreApp-Score.obj `if test -f 'Score.cpp'; then $(CYGPATH_W) 'Score.cpp'; else $(CYGPATH_W) '$(srcdir)/Score.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-Score.Tpo $(DEPDIR)/OgreApp-Score.Po
+#	$(AM_V_CXX)source='Score.cpp' object='OgreApp-Score.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-Score.obj `if test -f 'Score.cpp'; then $(CYGPATH_W) 'Score.cpp'; else $(CYGPATH_W) '$(srcdir)/Score.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

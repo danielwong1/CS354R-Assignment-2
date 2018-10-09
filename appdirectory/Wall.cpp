@@ -35,6 +35,7 @@ Wall::Wall(Ogre::String name,
     mass = 0.0;
     motionState = new OgreMotionState(tr, rootNode);
     body = new btRigidBody(mass, motionState, shape);
+    body->setUserPointer((void*) this);
     body->setRestitution(1.0f);
     simulator->dynamicsWorld->addRigidBody(body);
 }

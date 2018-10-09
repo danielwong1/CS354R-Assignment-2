@@ -6,7 +6,11 @@
 class Score
 {
     public:
+        int score;
+        CEGUI::Window *scoreWindow;
+
         Score();
+        void setScore(int count);
 };
 
 #endif
