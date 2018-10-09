@@ -13,7 +13,8 @@ class Physics {
 	btSequentialImpulseConstraintSolver* solver;
     btDiscreteDynamicsWorld* dynamicsWorld;
 	std::vector<GameObject *> gameObjects;
-
+    
+    btClock* physicsClock;
     Physics();
 };
 

@@ -14,13 +14,17 @@
 #include <string>
 #include "Physics.h"
 #include "BaseApplication.h"
+#include "Score.h"
 
 class Paddle;
 
 class BallGame : public BaseApplication
 {
 public:
+    static std::string ballString;
+    static std::string botString;
     Physics* simulator;
+    Score* scoreObj;
     
     BallGame(void);
     virtual ~BallGame(void);
@@ -31,6 +35,7 @@ protected:
     CEGUI::OgreRenderer* mRenderer;
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
+    void setupCEGUI(void);
 };
 
 #endif 
