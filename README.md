@@ -36,4 +36,6 @@ Miscellaneous testing and quality control can be a task unto itself. Just adding
 
 Not really. Assuming sound doesn't give us any trouble, we just need to implement the last few pieces of logic and polish the project before turning it in.
 
-
+# Credits
+Utilized SDL2 wrapper class from:
+https://github.com/jakebesworth/Simple-SDL2-Audio
