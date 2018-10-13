@@ -36,6 +36,7 @@ protected:
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
     void setupCEGUI(void);
+    void setupSDL(void);
 };
 
 #endif 

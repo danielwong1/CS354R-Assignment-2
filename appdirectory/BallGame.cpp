@@ -1,4 +1,6 @@
 #include "BallGame.h"
+#include <SDL2/SDL.h>
+#include "src/audio.h"
 #include <OgreConfigFile.h>
 #include "OgreRenderWindow.h"
 #include <OgreSceneManager.h>
@@ -133,9 +135,23 @@ void BallGame::setupCEGUI(void) {
     scoreObj = new Score();
 }
 
+void BallGame::setupSDL()
+{
+    /* Initialize only SDL Audio on default device */
+    if(SDL_Init(SDL_INIT_AUDIO) < 0)
+    {
+        return 1; 
+    }
+
+    /* Play music and a sound */
+    playMusic("music/highlands.wav", SDL_MIX_MAXVOLUME);
+    playSound("sounds/door1.wav", SDL_MIX_MAXVOLUME / 2);
+}
+
 void BallGame::createScene(void)
 {
     setupCEGUI();
+    setupSDL();
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
 
     Wall("leftWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_X);
