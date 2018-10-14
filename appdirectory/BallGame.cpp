@@ -146,8 +146,8 @@ void BallGame::setupSDL()
     initAudio();
 
     /* Play music and a sound */
-    //playMusic("music/highlands.wav", SDL_MIX_MAXVOLUME);
-    playSound("sounds/door1.wav", SDL_MIX_MAXVOLUME / 2);
+    playMusic("music/highlands.wav", SDL_MIX_MAXVOLUME);
+    //playSound("sounds/door1.wav", SDL_MIX_MAXVOLUME / 2);
 }
 
 void BallGame::createScene(void)

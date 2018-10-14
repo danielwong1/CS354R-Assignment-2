@@ -39,3 +39,5 @@ Not really. Assuming sound doesn't give us any trouble, we just need to implemen
 # Credits
 Utilized SDL2 wrapper class from:
 https://github.com/jakebesworth/Simple-SDL2-Audio
+Gathered Sound files from:
+http://cs.au.dk/~dsound/DigitalAudio.dir/Greenfoot/Pong.dir/Pong.html
