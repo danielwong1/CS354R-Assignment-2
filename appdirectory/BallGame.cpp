@@ -140,11 +140,13 @@ void BallGame::setupSDL()
     /* Initialize only SDL Audio on default device */
     if(SDL_Init(SDL_INIT_AUDIO) < 0)
     {
-        return 1; 
+        return;
     }
 
+    initAudio();
+
     /* Play music and a sound */
-    playMusic("music/highlands.wav", SDL_MIX_MAXVOLUME);
+    //playMusic("music/highlands.wav", SDL_MIX_MAXVOLUME);
     playSound("sounds/door1.wav", SDL_MIX_MAXVOLUME / 2);
 }
 
