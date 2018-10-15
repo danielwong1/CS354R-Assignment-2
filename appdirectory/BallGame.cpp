@@ -13,6 +13,9 @@
 #include "Wall.h"
 #include "Ball.h"
 #include "Paddle.h"
+#include "BallScoreCallback.h"
+#include "BallPaddleCallback.h"
+
 
 std::string BallGame::ballString = "ball";
 std::string BallGame::botString = "bot";
@@ -34,7 +37,7 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mKeyboard->capture();
     mMouse->capture();
 
-    double cameraSpeed = 0.01;
+    double cameraSpeed = 0.05;
     double zoomSpeed = 0.01;
     Ogre::Radian rotationSpeed = Ogre::Radian(Ogre::Degree(.1));
 
@@ -88,6 +91,29 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
      if(simulator != NULL) {
         simulator->dynamicsWorld->stepSimulation(simulator->physicsClock->getTimeSeconds());
         simulator->physicsClock->reset();
+
+
+        // this collision handler is done in math rather than bullet
+        btTransform ballTransform;
+        mBall->motionState->getWorldTransform(ballTransform);
+        btVector3 origin = ballTransform.getOrigin();
+
+        if (origin.z() > 15) {
+            ballTransform.setOrigin(btVector3(0.0f, 0.0f, 0.0f));
+            ballTransform.setRotation(btQuaternion::getIdentity());
+
+            mBall->motionState->setWorldTransform(ballTransform);
+            mBall->body->setWorldTransform(ballTransform);
+            mBall->body->clearForces();
+            mBall->body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+            mBall->body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
+
+            mBall->body->applyCentralImpulse(btVector3(0.0f, 0.0f, -1.0f));
+            scoreObj->setScore(0);
+        }
+
+        simulator->dynamicsWorld->contactPairTest(mBall->body, mWall->body, *mBallScoreCallback);
+        simulator->dynamicsWorld->contactPairTest(mBall->body, mPaddle->body, *mBallPaddleCallback);
         /*int numManifolds = simulator->dynamicsWorld->getDispatcher()->getNumManifolds();
         for (int i = 0; i < numManifolds; i++) {
             btPersistentManifold* contactManifold = simulator->dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
@@ -142,8 +168,8 @@ void BallGame::createScene(void)
     Wall("topWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_Y);
     Wall(botString, mSceneMgr, simulator, Ogre::Vector3::UNIT_Y);
     Wall("rightWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_X);
-    Wall("backWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Z);
-    Ball(ballString, mSceneMgr, simulator);
+    mWall = new Wall("backWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Z);
+    mBall = new Ball(ballString, mSceneMgr, simulator);
 
     mPaddle = new Paddle(mSceneMgr, simulator);
 
@@ -154,6 +180,13 @@ void BallGame::createScene(void)
     mSceneMgr->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5));
     
     light->setCastShadows(true);
+
+    createCollisionCallbacks();
+}
+
+void BallGame::createCollisionCallbacks(void) {
+    mBallScoreCallback = new BallScoreCallback(mBall, scoreObj);
+    mBallPaddleCallback = new BallPaddleCallback(mBall, mPaddle);
 }
 
 void BallGame::go()
