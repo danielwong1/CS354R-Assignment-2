@@ -1,7 +1,8 @@
-
+#include <SDL2/SDL.h>
 #include "BallScoreCallback.h"
 #include "Ball.h"
 #include "Score.h"
+#include "src/audio.h"
 
 /**
  * Constructs the BallBoundaryCallback
@@ -27,6 +28,7 @@ btScalar BallScoreCallback::addSingleResult(btManifoldPoint& cp,
 	// reset the score
 	if(!mBall->colliding) {
 		mBall->colliding = true;
+        playSound("sounds/ball_hit_wall.wav", SDL_MIX_MAXVOLUME / 10);
 		collisionClock->reset();
 		mScore->setScore(mScore->score + 1);
 	}

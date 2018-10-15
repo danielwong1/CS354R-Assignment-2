@@ -1,7 +1,9 @@
 
+#include <SDL2/SDL.h>
 #include "BallPaddleCallback.h"
 #include "Ball.h"
 #include "Paddle.h"
+#include "src/audio.h"
 
 /**
  * Constructs the BallBoundaryCallback
@@ -33,4 +35,5 @@ btScalar BallPaddleCallback::addSingleResult(btManifoldPoint& cp,
 	btVector3 rotatedNormal = initialNormal.rotate(axis, angle);
 
 	mBall->body->applyCentralImpulse(0.1f * rotatedNormal);
+	playSound("sounds/ball_hit_paddle.wav", SDL_MIX_MAXVOLUME / 10);
 }

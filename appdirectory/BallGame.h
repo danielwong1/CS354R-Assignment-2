@@ -52,7 +52,11 @@ protected:
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
     void setupCEGUI(void);
+<<<<<<< HEAD
     void reset(btTransform ballTransform, btVector3 origin);
+=======
+    void setupSDL(void);
+>>>>>>> 79e53e9c51f94d2e82c48658d776f06a1d0d0ef7
 };
 
 #endif 
