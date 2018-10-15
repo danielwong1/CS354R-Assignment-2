@@ -38,7 +38,6 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mMouse->capture();
 
     double cameraSpeed = 0.05;
-    double zoomSpeed = 0.01;
     Ogre::Radian rotationSpeed = Ogre::Radian(Ogre::Degree(.1));
 
     if(mKeyboard->isKeyDown(OIS::KC_ESCAPE))
@@ -98,7 +97,7 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
         mBall->motionState->getWorldTransform(ballTransform);
         btVector3 origin = ballTransform.getOrigin();
 
-        if (origin.z() > 15) {
+        if (origin.z() > Wall::GRID_SIZE) {
             ballTransform.setOrigin(btVector3(0.0f, 0.0f, 0.0f));
             ballTransform.setRotation(btQuaternion::getIdentity());
 
@@ -113,36 +112,13 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
         }
 
         simulator->dynamicsWorld->contactPairTest(mBall->body, mWall->body, *mBallScoreCallback);
-        simulator->dynamicsWorld->contactPairTest(mBall->body, mPaddle->body, *mBallPaddleCallback);
-        /*int numManifolds = simulator->dynamicsWorld->getDispatcher()->getNumManifolds();
-        for (int i = 0; i < numManifolds; i++) {
-            btPersistentManifold* contactManifold = simulator->dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
-            int numContacts = contactManifold->getNumContacts();
-            if (numContacts > 0)
-            {
-                const btCollisionObject* obA = contactManifold->getBody0();
-                const btCollisionObject* obB = contactManifold->getBody1();
-                
-                GameObject* a = (GameObject*)obA->getUserPointer();
-                GameObject* b = (GameObject*)obB->getUserPointer();
-                
-                printf("astring : %s\n", a->name.c_str());
-                printf("bstring : %s\n", b->name.c_str());
-                printf("\n");
-                if (a->name == ballString) {
-                    if(b->name == botString) {
-                        scoreObj->setScore(scoreObj->score + 1);
-                    }
-                }
-                
-                //8
-                if (b->name == ballString){
-                    if(a->name == botString) {
-                        scoreObj->setScore(scoreObj->score + 1);
-                    }
-                }
+        if(mBall->colliding) {
+            bool away = mBall->rootNode->getPosition().distance(mWall->rootNode->getPosition()) > Wall::GRID_SIZE / 4;
+            if(collisionClock->getTimeSeconds() > .2 && away) {
+                mBall->colliding = false;
             }
-        }*/
+        }
+        simulator->dynamicsWorld->contactPairTest(mBall->body, mPaddle->body, *mBallPaddleCallback);
     }
     return true;
 }
@@ -185,14 +161,14 @@ void BallGame::createScene(void)
 }
 
 void BallGame::createCollisionCallbacks(void) {
-    mBallScoreCallback = new BallScoreCallback(mBall, scoreObj);
+    mBallScoreCallback = new BallScoreCallback(mBall, scoreObj, collisionClock);
     mBallPaddleCallback = new BallPaddleCallback(mBall, mPaddle);
 }
 
 void BallGame::go()
 {
-
     simulator = new Physics();
+    collisionClock = new btClock();
     BaseApplication::go();
 }
 

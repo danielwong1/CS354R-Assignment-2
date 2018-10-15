@@ -9,7 +9,8 @@
  * @constructor
  * @param pBall
  */
-BallScoreCallback::BallScoreCallback(Ball* pBall, Score* pScore) : mBall(pBall), mScore(pScore) {}
+BallScoreCallback::BallScoreCallback(Ball* pBall, Score* pScore, btClock* pCollisionClock) : 
+mBall(pBall), mScore(pScore), collisionClock(pCollisionClock){}
 
 /**
  * Callback for whenever the ball collides with the Score
@@ -24,6 +25,10 @@ btScalar BallScoreCallback::addSingleResult(btManifoldPoint& cp,
 	int index1) {
 
 	// reset the score
-	mScore->setScore(mScore->score + 1);
-	mBall->body->applyCentralImpulse(btVector3(0.0f, 0.0f, 0.1f));
+	if(!mBall->colliding) {
+		mScore->setScore(mScore->score + 1);
+		mBall->body->applyCentralImpulse(btVector3(0.0f, 0.0f, 0.5f));
+		mBall->colliding = true;
+		collisionClock->reset();
+	}
 }

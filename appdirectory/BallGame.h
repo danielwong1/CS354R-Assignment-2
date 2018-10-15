@@ -29,6 +29,7 @@ public:
     static std::string botString;
     Physics* simulator;
     Score* scoreObj;
+    btClock* collisionClock;
 
     BallGame(void);
     virtual ~BallGame(void);

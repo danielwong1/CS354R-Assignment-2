@@ -9,7 +9,7 @@ class Score;
 
 struct BallScoreCallback : public btCollisionWorld::ContactResultCallback {
 
-	BallScoreCallback(Ball* ball, Score* score);
+	BallScoreCallback(Ball* ball, Score* score, btClock* pCollisionClock);
  public:
   btScalar addSingleResult(btManifoldPoint& cp,
 	const btCollisionObjectWrapper* colObj0Wrap,
@@ -22,6 +22,7 @@ struct BallScoreCallback : public btCollisionWorld::ContactResultCallback {
  private:
  	Score* mScore;
  	Ball* mBall;
+	btClock* collisionClock;
 };
 
 #endif

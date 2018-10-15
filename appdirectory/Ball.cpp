@@ -13,7 +13,7 @@ Ball::Ball(Ogre::String name,
 	this->name = name;
     this->sceneMgr = sceneMgr;
     this->simulator = simulator;
-
+    colliding = false;
     rootNode = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
 	geom = this->sceneMgr->createEntity(name, "sphere.mesh");
 	rootNode->attachObject(geom);
