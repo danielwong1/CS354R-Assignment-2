@@ -17,7 +17,7 @@ Paddle::Paddle(Ogre::SceneManager* sceneMgr,
     rootNode = this->sceneMgr->getRootSceneNode()->createChildSceneNode();
 	geom = this->sceneMgr->createEntity(Ogre::SceneManager::PT_CUBE);
 	rootNode->attachObject(geom);
-    rootNode->scale(0.06f, 0.04f, 0.01f);
+    rootNode->scale(0.06f, 0.06f, 0.01f);
 
     geom->setCastShadows(false);
     geom->setMaterialName("Examples/Water0");
@@ -37,6 +37,20 @@ Paddle::Paddle(Ogre::SceneManager* sceneMgr,
     body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
     body->setActivationState(DISABLE_DEACTIVATION);
     moveBy(Ogre::Vector3(0.0f, 2.0f, 8.0f));    
+}
+
+void Paddle::moveTo(const Ogre::Vector3 &position) {
+    btTransform worldTransform;
+    motionState->getWorldTransform(worldTransform);
+
+    worldTransform.setOrigin(btVector3(position.x, position.y, position.z));
+    motionState->setWorldTransform(worldTransform);
+}
+
+btVector3 Paddle::getPosition() const {
+    btTransform worldTransform;
+    motionState->getWorldTransform(worldTransform);
+    return worldTransform.getOrigin();
 }
 
 void Paddle::moveBy(const Ogre::Vector3 &distance) {

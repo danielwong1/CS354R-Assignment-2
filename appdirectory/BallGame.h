@@ -27,9 +27,11 @@ class BallGame : public BaseApplication
 public:
     static std::string ballString;
     static std::string botString;
+    static int rotationBound;
     Physics* simulator;
     Score* scoreObj;
     btClock* collisionClock;
+    Ogre::Vector2 mRot;
 
     BallGame(void);
     virtual ~BallGame(void);
@@ -47,8 +49,12 @@ protected:
     CEGUI::OgreRenderer* mRenderer;
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
+    virtual bool mouseMoved(const OIS::MouseEvent &ev);
     void setupCEGUI(void);
     void setupSDL(void);
+private:
+    int currentRotationX;
+    int currentRotationY;
 };
 
 #endif 
