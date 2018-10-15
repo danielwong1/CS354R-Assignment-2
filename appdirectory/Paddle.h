@@ -10,7 +10,7 @@ class Paddle : public GameObject {
 
   void moveBy(const Ogre::Vector3 &distance);
   void rotateBy(const Ogre::Quaternion &rotation);
-
+  void getRotation(btQuaternion& quaternion);
 };
 
 #endif

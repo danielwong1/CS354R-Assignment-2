@@ -17,6 +17,10 @@
 #include "Score.h"
 
 class Paddle;
+class Ball;
+class Wall;
+class BallScoreCallback;
+class BallPaddleCallback;
 
 class BallGame : public BaseApplication
 {
@@ -29,8 +33,15 @@ public:
     BallGame(void);
     virtual ~BallGame(void);
     virtual void go();
+
+    void createCollisionCallbacks(void);
 protected:
 	Paddle* mPaddle;
+	Ball* mBall;
+	Wall* mWall;
+
+	BallScoreCallback* mBallScoreCallback;
+	BallPaddleCallback* mBallPaddleCallback;
 
     CEGUI::OgreRenderer* mRenderer;
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);

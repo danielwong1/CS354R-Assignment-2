@@ -62,3 +62,8 @@ void Paddle::rotateBy(const Ogre::Quaternion &rotation) {
     motionState->setWorldTransform(worldTransform);
 }
 
+void Paddle::getRotation(btQuaternion& quaternion) {
+    btTransform worldTransform;
+    motionState->getWorldTransform(worldTransform);
+    quaternion = worldTransform.getRotation();
+}
