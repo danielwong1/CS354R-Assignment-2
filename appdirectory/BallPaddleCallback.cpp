@@ -26,7 +26,7 @@ btScalar BallPaddleCallback::addSingleResult(btManifoldPoint& cp,
 
 	btQuaternion quaternion;
 	mPaddle->getRotation(quaternion);
-
+	mBall->floorBounces = 0;
 	btVector3 axis = quaternion.getAxis();
 	btScalar angle = quaternion.getAngle();
 	btVector3 initialNormal(0.0f, 0.0f, -1.0f);

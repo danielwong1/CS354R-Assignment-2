@@ -90,10 +90,9 @@ void BaseApplication::createCamera(void)
     // Create the camera
     mCamera = mSceneMgr->createCamera("MainCam");
 
-    // Position it at 500 in Z direction
-    mCamera->setPosition(Ogre::Vector3(0, Wall::GRID_SIZE*3/4, Wall::GRID_SIZE * 2));
+    mCamera->setPosition(Ogre::Vector3(0, 0, Wall::GRID_SIZE*5/4));
     // Look back along -Z
-    mCamera->lookAt(Ogre::Vector3(0,-Wall::GRID_SIZE*3/4,-Wall::GRID_SIZE));
+    mCamera->lookAt(Ogre::Vector3(0, -Wall::GRID_SIZE/4 ,-Wall::GRID_SIZE));
     mCamera->setNearClipDistance(5);
 }
 //---------------------------------------------------------------------------

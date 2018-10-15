@@ -15,7 +15,7 @@
 #include "Paddle.h"
 #include "BallScoreCallback.h"
 #include "BallPaddleCallback.h"
-
+#include "BallFloorCallback.h"
 
 std::string BallGame::ballString = "ball";
 std::string BallGame::botString = "bot";
@@ -26,6 +26,21 @@ BallGame::BallGame() : mRenderer(0)
 BallGame::~BallGame(void)
 {
     CEGUI::OgreRenderer::destroySystem();
+}
+
+void BallGame::reset(btTransform ballTransform, btVector3 origin) {
+    started = false;
+    ballTransform.setOrigin(btVector3(0.0f, 0.0f, 0.0f));
+    ballTransform.setRotation(btQuaternion::getIdentity());
+
+    mBall->motionState->setWorldTransform(ballTransform);
+    mBall->body->setWorldTransform(ballTransform);
+    mBall->body->clearForces();
+    mBall->body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+    mBall->body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
+
+    mBall->floorBounces = 0;
+    scoreObj->setScore(0);
 }
 
 bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -43,6 +58,10 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if(mKeyboard->isKeyDown(OIS::KC_ESCAPE))
         return false;
 
+    if(mKeyboard->isKeyDown(OIS::KC_SPACE) && !started) {
+        started = true;
+        mBall->body->applyCentralImpulse(btVector3(0.0f, 0.0f, -3.0f));
+    }
     if(mKeyboard->isKeyDown(OIS::KC_A)) {
         Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(-cameraSpeed, 0, 0));
@@ -67,7 +86,7 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
         mPaddle->moveBy(Ogre::Vector3(0, -cameraSpeed, 0));
     }
 
-    mCamera->lookAt(Ogre::Vector3(0,-Wall::GRID_SIZE*3/4,-Wall::GRID_SIZE));
+    mCamera->lookAt(Ogre::Vector3(0,0,-Wall::GRID_SIZE));
 
     if(mKeyboard->isKeyDown(OIS::KC_UP)) {
         mPaddle->rotateBy(Ogre::Quaternion(-rotationSpeed, Ogre::Vector3(1, 0, 0)));
@@ -87,37 +106,35 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     mSceneMgr->setShadowFarDistance(mCamera->getPosition().z + Wall::GRID_SIZE);
     
-     if(simulator != NULL) {
+     if(simulator != NULL && started) {
         simulator->dynamicsWorld->stepSimulation(simulator->physicsClock->getTimeSeconds());
         simulator->physicsClock->reset();
 
-
-        // this collision handler is done in math rather than bullet
         btTransform ballTransform;
         mBall->motionState->getWorldTransform(ballTransform);
         btVector3 origin = ballTransform.getOrigin();
 
         if (origin.z() > Wall::GRID_SIZE) {
-            ballTransform.setOrigin(btVector3(0.0f, 0.0f, 0.0f));
-            ballTransform.setRotation(btQuaternion::getIdentity());
-
-            mBall->motionState->setWorldTransform(ballTransform);
-            mBall->body->setWorldTransform(ballTransform);
-            mBall->body->clearForces();
-            mBall->body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
-            mBall->body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
-
-            mBall->body->applyCentralImpulse(btVector3(0.0f, 0.0f, -1.0f));
-            scoreObj->setScore(0);
+            reset(ballTransform, origin);
         }
 
         simulator->dynamicsWorld->contactPairTest(mBall->body, mWall->body, *mBallScoreCallback);
         if(mBall->colliding) {
             bool away = mBall->rootNode->getPosition().distance(mWall->rootNode->getPosition()) > Wall::GRID_SIZE / 4;
-            if(collisionClock->getTimeSeconds() > .2 && away) {
+            if(collisionClock->getTimeSeconds() > .3 && away) {
                 mBall->colliding = false;
             }
         }
+        simulator->dynamicsWorld->contactPairTest(mBall->body, bWall->body, *mBallFloorCallback);
+        if(mBall->f_colliding) {
+            bool away = mBall->rootNode->getPosition().distance(bWall->rootNode->getPosition()) > Wall::GRID_SIZE / 4;
+            if(collisionClock->getTimeSeconds() > .3 && away) {
+                mBall->f_colliding = false;
+            }
+        }
+        /*if(mBall->floorBounces > 2) {
+            reset(ballTransform, origin);
+        }*/
         simulator->dynamicsWorld->contactPairTest(mBall->body, mPaddle->body, *mBallPaddleCallback);
     }
     return true;
@@ -142,11 +159,10 @@ void BallGame::createScene(void)
 
     Wall("leftWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_X);
     Wall("topWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_Y);
-    Wall(botString, mSceneMgr, simulator, Ogre::Vector3::UNIT_Y);
+    bWall = new Wall(botString, mSceneMgr, simulator, Ogre::Vector3::UNIT_Y);
     Wall("rightWall", mSceneMgr, simulator, Ogre::Vector3::NEGATIVE_UNIT_X);
     mWall = new Wall("backWall", mSceneMgr, simulator, Ogre::Vector3::UNIT_Z);
     mBall = new Ball(ballString, mSceneMgr, simulator);
-
     mPaddle = new Paddle(mSceneMgr, simulator);
 
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
@@ -162,13 +178,16 @@ void BallGame::createScene(void)
 
 void BallGame::createCollisionCallbacks(void) {
     mBallScoreCallback = new BallScoreCallback(mBall, scoreObj, collisionClock);
+    mBallFloorCallback = new BallFloorCallback(mBall, f_collisionClock);
     mBallPaddleCallback = new BallPaddleCallback(mBall, mPaddle);
 }
 
 void BallGame::go()
 {
+    started = false;
     simulator = new Physics();
     collisionClock = new btClock();
+    f_collisionClock = new btClock();
     BaseApplication::go();
 }
 

@@ -6,6 +6,8 @@
 class Ball : public GameObject {
     public:
     bool colliding;
+    bool f_colliding;
+    int floorBounces;
     Ball(Ogre::String name, 
     Ogre::SceneManager* sceneMgr, 
     Physics* simulator);

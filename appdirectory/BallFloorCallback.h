@@ -1,14 +1,13 @@
-#ifndef __BallScoreCallback_h_
-#define __BallScoreCallback_h_
+#ifndef __BallFloorCallback_h_
+#define __BallFloorCallback_h_
 
 #include <btBulletCollisionCommon.h>
 
 class Ball;
-class Score;
 
-struct BallScoreCallback : public btCollisionWorld::ContactResultCallback {
+struct BallFloorCallback : public btCollisionWorld::ContactResultCallback {
 
-	BallScoreCallback(Ball* ball, Score* score, btClock* pCollisionClock);
+	BallFloorCallback(Ball* ball, btClock* pCollisionClock);
  public:
   btScalar addSingleResult(btManifoldPoint& cp,
 	const btCollisionObjectWrapper* colObj0Wrap,
@@ -19,7 +18,6 @@ struct BallScoreCallback : public btCollisionWorld::ContactResultCallback {
 	int index1);
 
  private:
- 	Score* mScore;
  	Ball* mBall;
 	btClock* collisionClock;
 };

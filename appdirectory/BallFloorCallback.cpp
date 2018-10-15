@@ -1,5 +1,4 @@
-
-#include "BallScoreCallback.h"
+#include "BallFloorCallback.h"
 #include "Ball.h"
 #include "Score.h"
 
@@ -9,14 +8,14 @@
  * @constructor
  * @param pBall
  */
-BallScoreCallback::BallScoreCallback(Ball* pBall, Score* pScore, btClock* pCollisionClock) : 
-mBall(pBall), mScore(pScore), collisionClock(pCollisionClock){}
+BallFloorCallback::BallFloorCallback(Ball* pBall, btClock* pCollisionClock) : 
+mBall(pBall), collisionClock(pCollisionClock){}
 
 /**
  * Callback for whenever the ball collides with the Score
  *
  */
-btScalar BallScoreCallback::addSingleResult(btManifoldPoint& cp,
+btScalar BallFloorCallback::addSingleResult(btManifoldPoint& cp,
 	const btCollisionObjectWrapper* colObj0Wrap,
 	int partId0,
 	int index0,
@@ -25,9 +24,9 @@ btScalar BallScoreCallback::addSingleResult(btManifoldPoint& cp,
 	int index1) {
 
 	// reset the score
-	if(!mBall->colliding) {
-		mBall->colliding = true;
+	if(!mBall->f_colliding) {
+		mBall->f_colliding = true;
+        mBall->floorBounces++;
 		collisionClock->reset();
-		mScore->setScore(mScore->score + 1);
 	}
 }

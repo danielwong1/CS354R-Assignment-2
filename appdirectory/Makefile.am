@@ -1,10 +1,10 @@
 ACLOCAL_AMFLAGS= -I m4
 
-noinst_HEADERS= BallGame.h Physics.h GameObject.h Wall.h Ball.h OgreMotionState.h BaseApplication.h Paddle.h Score.h BallScoreCallback.h BallPaddleCallback.h
+noinst_HEADERS= BallGame.h Physics.h GameObject.h Wall.h Ball.h OgreMotionState.h BaseApplication.h Paddle.h Score.h BallScoreCallback.h BallFloorCallback.h BallPaddleCallback.h
 
 bin_PROGRAMS= OgreApp
 OgreApp_CPPFLAGS= -I$(top_srcdir)
-OgreApp_SOURCES= BallGame.cpp Physics.cpp GameObject.cpp Wall.cpp Ball.cpp OgreMotionState.cpp BaseApplication.cpp Paddle.cpp Score.cpp BallScoreCallback.cpp BallPaddleCallback.cpp
+OgreApp_SOURCES= BallGame.cpp Physics.cpp GameObject.cpp Wall.cpp Ball.cpp OgreMotionState.cpp BaseApplication.cpp Paddle.cpp Score.cpp BallScoreCallback.cpp BallFloorCallback.cpp BallPaddleCallback.cpp
 
 OgreApp_CXXFLAGS= $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS)
 OgreApp_LDADD= $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS)

@@ -30,7 +30,7 @@ Paddle::Paddle(Ogre::SceneManager* sceneMgr,
 
 	body = new btRigidBody(mass, motionState, shape, inertia);
 
-    body->setRestitution(1.05f);
+    body->setRestitution(1.0f);
     simulator->dynamicsWorld->addRigidBody(body);
     simulator->gameObjects.push_back(this);
 

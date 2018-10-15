@@ -21,6 +21,7 @@ class Ball;
 class Wall;
 class BallScoreCallback;
 class BallPaddleCallback;
+class BallFloorCallback;
 
 class BallGame : public BaseApplication
 {
@@ -30,6 +31,8 @@ public:
     Physics* simulator;
     Score* scoreObj;
     btClock* collisionClock;
+    btClock* f_collisionClock;
+    bool started;
 
     BallGame(void);
     virtual ~BallGame(void);
@@ -40,14 +43,16 @@ protected:
 	Paddle* mPaddle;
 	Ball* mBall;
 	Wall* mWall;
+    Wall* bWall;
 
 	BallScoreCallback* mBallScoreCallback;
 	BallPaddleCallback* mBallPaddleCallback;
-
+    BallFloorCallback* mBallFloorCallback;
     CEGUI::OgreRenderer* mRenderer;
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     virtual void createScene(void);
     void setupCEGUI(void);
+    void reset(btTransform ballTransform, btVector3 origin);
 };
 
 #endif 
