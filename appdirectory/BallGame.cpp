@@ -21,8 +21,12 @@
 
 std::string BallGame::ballString = "ball";
 std::string BallGame::botString = "bot";
+int BallGame::rotationBound = 400;
+
 BallGame::BallGame() : mRenderer(0)
 {
+    currentRotationX = 0;
+    currentRotationY = 0;
 }
 
 BallGame::~BallGame(void)
@@ -58,6 +62,9 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     double cameraSpeed = 0.05;
     Ogre::Radian rotationSpeed = Ogre::Radian(Ogre::Degree(.1));
+    Ogre::Vector3 cameraPos = mCamera->getPosition();
+
+
 
     if(mKeyboard->isKeyDown(OIS::KC_ESCAPE))
         return false;
@@ -67,25 +74,21 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
         mBall->body->applyCentralImpulse(btVector3(0.0f, 0.0f, -3.0f));
     }
     if(mKeyboard->isKeyDown(OIS::KC_A)) {
-        Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(-cameraSpeed, 0, 0));
         mPaddle->moveBy(Ogre::Vector3(-cameraSpeed, 0, 0));
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_D)) {
-        Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(cameraSpeed, 0, 0));
         mPaddle->moveBy(Ogre::Vector3(cameraSpeed, 0, 0));
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_W)) {
-        Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(0, cameraSpeed, 0));
         mPaddle->moveBy(Ogre::Vector3(0, cameraSpeed, 0));
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_S)) {
-        Ogre::Vector3 cameraPos = mCamera->getPosition();
         mCamera->setPosition(cameraPos + Ogre::Vector3(0, -cameraSpeed, 0));
         mPaddle->moveBy(Ogre::Vector3(0, -cameraSpeed, 0));
     }
@@ -93,21 +96,50 @@ bool BallGame::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mCamera->lookAt(Ogre::Vector3(0,0,-Wall::GRID_SIZE));
 
     if(mKeyboard->isKeyDown(OIS::KC_UP)) {
-        mPaddle->rotateBy(Ogre::Quaternion(-rotationSpeed, Ogre::Vector3(1, 0, 0)));
+        if (currentRotationY < rotationBound) {
+            currentRotationY++;
+            mPaddle->rotateBy(Ogre::Quaternion(-rotationSpeed, Ogre::Vector3(1, 0, 0)));
+        }
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_RIGHT)) {
-        mPaddle->rotateBy(Ogre::Quaternion(rotationSpeed, Ogre::Vector3(0, 1, 0)));
+        if (currentRotationX < rotationBound) {
+            currentRotationX++;
+            mPaddle->rotateBy(Ogre::Quaternion(rotationSpeed, Ogre::Vector3(0, 1, 0)));
+        }
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_DOWN)) {
-        mPaddle->rotateBy(Ogre::Quaternion(rotationSpeed, Ogre::Vector3(1, 0, 0)));
+        if (currentRotationY > -rotationBound) {
+            currentRotationY--;
+            mPaddle->rotateBy(Ogre::Quaternion(rotationSpeed, Ogre::Vector3(1, 0, 0)));
+        }
     }
 
     if(mKeyboard->isKeyDown(OIS::KC_LEFT)) {
-        mPaddle->rotateBy(Ogre::Quaternion(-rotationSpeed, Ogre::Vector3(0, 1, 0)));
+        if (currentRotationX > -rotationBound) {
+            currentRotationX--;
+            mPaddle->rotateBy(Ogre::Quaternion(-rotationSpeed, Ogre::Vector3(0, 1, 0)));
+        }
     }
 
+
+    cameraPos = mCamera->getPosition();
+    mCamera->setPosition(cameraPos + Ogre::Vector3(cameraSpeed * mRot.x, -cameraSpeed * mRot.y, 0));
+    mPaddle->moveBy(Ogre::Vector3(cameraSpeed * mRot.x, -cameraSpeed * mRot.y, 0));
+    mRot = Ogre::Vector2::ZERO;
+    btVector3 position = mPaddle->getPosition();
+    mPaddle->moveTo(Ogre::Vector3(
+        Ogre::Math::Clamp(position.x(), -(Wall::GRID_SIZE * 0.5f) + 3.0f, Wall::GRID_SIZE * 0.5f - 3.0f),
+        Ogre::Math::Clamp(position.y(), -(Wall::GRID_SIZE * 0.5f) + 3.0f, Wall::GRID_SIZE * 0.5f - 3.0f),
+        position.z()
+    ));
+    cameraPos = mCamera->getPosition();
+    mCamera->setPosition(Ogre::Vector3(
+        Ogre::Math::Clamp(cameraPos.x, -(Wall::GRID_SIZE * 0.5f) + 3.0f, Wall::GRID_SIZE * 0.5f - 3.0f),
+        Ogre::Math::Clamp(cameraPos.y, (Wall::GRID_SIZE * 0.125f) + 2.75f, Wall::GRID_SIZE * 1.125f - 3.0f),
+        cameraPos.z
+    ));
     mSceneMgr->setShadowFarDistance(mCamera->getPosition().z + Wall::GRID_SIZE);
     
      if(simulator != NULL && started) {
@@ -200,6 +232,12 @@ void BallGame::createCollisionCallbacks(void) {
     mBallScoreCallback = new BallScoreCallback(mBall, scoreObj, collisionClock);
     mBallFloorCallback = new BallFloorCallback(mBall, f_collisionClock);
     mBallPaddleCallback = new BallPaddleCallback(mBall, mPaddle);
+}
+
+bool BallGame::mouseMoved(const OIS::MouseEvent &ev)
+{
+    mRot.x = ev.state.X.rel;
+    mRot.y = ev.state.Y.rel;
 }
 
 void BallGame::go()
